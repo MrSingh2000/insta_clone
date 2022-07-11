@@ -14,3 +14,5 @@ const fetchUser = (req, res, next) => {
         res.status(401).send({ error: "Invalid auth-token" });
     }
 }
+
+module.exports = fetchUser;
