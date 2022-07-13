@@ -17,6 +17,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/user', require('./routes/followers'));
+
 
 app.listen(port, () => {
   console.log(`Instagram app listening on port ${port}`)
