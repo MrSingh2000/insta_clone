@@ -15,8 +15,7 @@ const UserInfoSchema = new Schema({
         ref: 'user'
     }],
     posts: [{
-        date: String,
-        contentType: String,
+        type: String,
     }]
 });
 
