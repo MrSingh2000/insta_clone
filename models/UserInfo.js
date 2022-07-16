@@ -15,6 +15,10 @@ const UserInfoSchema = new Schema({
         ref: 'user'
     }],
     posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'post'
+    }],
+    story: [{
         type: String,
     }]
 });
