@@ -8,6 +8,7 @@ import Home from './components/Home';
 import Contact from './components/Contact';
 import Login from './components/registration/Login';
 import Signup from './components/registration/Signup';
+import MyProfile from './components/MyProfile';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
+        <Route path="/myprofile" element={<MyProfile />} />
       </Routes>
     </BrowserRouter>
   );
