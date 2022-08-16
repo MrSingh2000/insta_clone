@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const fetchUser = require('../middlewares/fetchUser');
+const UserInfo = require('../models/UserInfo');
 require("dotenv").config();
 
 
@@ -55,7 +56,7 @@ router.post('/register', [
     }
 
     try {
-        let { username, password, phoneNum, email } = req.body;
+        let { username, password, phoneNum, email, name } = req.body;
         let user = await User.findOne({ username });
         if (user) {
             return res.status(404).json({ error: "Username is not available" });
@@ -64,6 +65,13 @@ router.post('/register', [
         const securePass = await bcrypt.hash(password, salt);
         user = await User.create({
             username, phoneNum, email, password: securePass
+        });
+        await UserInfo.create({
+            userid: user._id,
+            name,
+            followers: [],
+            following: [],
+            posts: [postDetails._id]
         });
         const data = {
             user: {
@@ -83,8 +91,8 @@ router.get('/get_user', fetchUser, async (req, res) => {
     try {
         let id = req.user.id;
         let user = await User.findById(id).select('-password');
-        if(!user){
-            return res.status(400).json({error: "User not found!"});
+        if (!user) {
+            return res.status(400).json({ error: "User not found!" });
         }
         res.json(user);
 

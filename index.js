@@ -19,6 +19,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/followers'));
 app.use('/api/post', require('./routes/posts'));
+app.use('/api/search', require('./routes/search'));
+app.use('/api/update', require('./routes/userUpdate'));
 
 
 app.listen(port, () => {

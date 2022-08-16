@@ -6,6 +6,12 @@ const UserInfoSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
+    name: {
+        type: String,
+    },
+    bio: {
+        type: String,
+    },
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'

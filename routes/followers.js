@@ -5,7 +5,6 @@ const { check, validationResult, body } = require('express-validator');
 const fetchUser = require('../middlewares/fetchUser');
 const User = require('../models/User');
 const UserInfo = require('../models/UserInfo');
-const { route } = require('./auth');
 
 
 // Route 1: Add a following

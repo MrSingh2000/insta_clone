@@ -5,3 +5,30 @@ body.modal-active {
   overflow-x: hidden;
   overflow-y: visible !important;
 }
+
+.fileLabel input[type="file"] {
+  position: absolute;
+  top: -1000px;
+}
+.fileLabel {
+  cursor: pointer;
+  border: 1px solid #0095F6;
+  border-radius: 5px;
+  padding: 5px 15px;
+  margin: 5px;
+  background: #0095F6;
+  display: inline-block;
+  color: white;
+}
+.fileLabel:hover {
+  background: #0094f6c2;
+}
+.fileLabel:active {
+  background: #05619e;
+}
+.fileLabel:invalid + span {
+  color: #000000;
+}
+.fileLabel:valid + span {
+  color: #ffffff;
+}
