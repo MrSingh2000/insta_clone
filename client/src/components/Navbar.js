@@ -3,10 +3,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../static/login/login_logo.png';
 import mainProfile from "../static/home/mainpp.jpg";
 import axios from 'axios';
+import { setLoading } from './state/reducers/loadingReducer';
+import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 
 export function DesktopNav() {
     let location = useLocation();
     let navigate = useNavigate();
+    let dispatch = useDispatch();
+
     // console.log(process.env.REACT_APP_AUTH_TOKEN);
     const [profileDrop, setProfileDrop] = useState(false);
     const [searchList, setSearchList] = useState([]);
@@ -37,10 +41,8 @@ export function DesktopNav() {
             url: `${process.env.REACT_APP_HOST}/api/search/get?search=${username}`,
             headers: {
                 "authToken": process.env.REACT_APP_AUTH_TOKEN,
-                "Content-Type": "ultipart/form-data",
             }
         }).then((res) => {
-            console.log(res.data);
             setSearchList(res.data);
         })
     }
@@ -53,15 +55,23 @@ export function DesktopNav() {
         body.classList.toggle('modal-active');
     }
 
+    const openUser = (username) => {
+        dispatch(setLoading({value: true}));
+        navigate(`/user/${username}`);
+    }
+
     return (
         <nav className="h-fit p-2 flex items-center m-auto w-full lg:w-2/3 md:justif-around justify-between border-b-2 border-gray-200">
-            {/* Camera */}
-            {location.pathname.indexOf("/user/") !== -1 ? (
-                <svg onClick={() => navigate(-1)} aria-label="Back" className='-rotate-90' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M21 17.502a.997.997 0 01-.707-.293L12 8.913l-8.293 8.296a1 1 0 11-1.414-1.414l9-9.004a1.03 1.03 0 011.414 0l9 9.004A1 1 0 0121 17.502z"></path></svg>
-                ) : (
+            {location.pathname.indexOf("/user/") === -1 ? (
+                // Camera icon
+                <>
+                <svg aria-label="New Story" className='sm:hidden mx-3' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><circle cx="12" cy="13.191" fill="none" r="4.539" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></circle><path d="M18.592 21.374A3.408 3.408 0 0022 17.966V8.874a3.41 3.41 0 00-3.41-3.409h-.52a2.108 2.108 0 01-1.954-1.375 2.082 2.082 0 00-2.204-1.348h-3.824A2.082 2.082 0 007.884 4.09 2.108 2.108 0 015.93 5.465h-.52A3.41 3.41 0 002 8.875v9.091a3.408 3.408 0 003.408 3.408z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path></svg>
+                </>
+            ) : (
                 // back button in case of a profile is searched
-                <svg ariaLabel="New Story" className='md:hidden mx-3' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><circle cx="12" cy="13.191" fill="none" r="4.539" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></circle><path d="M18.592 21.374A3.408 3.408 0 0022 17.966V8.874a3.41 3.41 0 00-3.41-3.409h-.52a2.108 2.108 0 01-1.954-1.375 2.082 2.082 0 00-2.204-1.348h-3.824A2.082 2.082 0 007.884 4.09 2.108 2.108 0 015.93 5.465h-.52A3.41 3.41 0 002 8.875v9.091a3.408 3.408 0 003.408 3.408z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path></svg>
-            )}
+                <svg onClick={() => navigate(-1)} aria-label="Back" className='-rotate-90 sm:hidden' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M21 17.502a.997.997 0 01-.707-.293L12 8.913l-8.293 8.296a1 1 0 11-1.414-1.414l9-9.004a1.03 1.03 0 011.414 0l9 9.004A1 1 0 0121 17.502z"></path></svg>
+            )
+            }
 
 
             <img className="w-24" src={logo} alt="instagram" />
@@ -73,7 +83,7 @@ export function DesktopNav() {
 
                         {searchList.map((user) => {
                             return (
-                                <li key={user._id} className="w-full">
+                                <li key={user._id} className="w-full" onClick={() => openUser(user.username)}>
                                     <button className="w-full">
                                         {user.username}
                                     </button>
@@ -93,7 +103,7 @@ export function DesktopNav() {
                 </Link>
                 {/* Messages */}
                 <Link to="/" className="cursor-pointer">
-                    <svg aria-label="Messenger" className={`${location.pathname.indexOf("/user/") !== -1 ? "hidden" : ""} mx-3`} color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M12.003 2.001a9.705 9.705 0 110 19.4 10.876 10.876 0 01-2.895-.384.798.798 0 00-.533.04l-1.984.876a.801.801 0 01-1.123-.708l-.054-1.78a.806.806 0 00-.27-.569 9.49 9.49 0 01-3.14-7.175 9.65 9.65 0 0110-9.7z" fill="none" stroke="currentColor" strokeMiterlimit="10" strokeWidth="1.739"></path><path d="M17.79 10.132a.659.659 0 00-.962-.873l-2.556 2.05a.63.63 0 01-.758.002L11.06 9.47a1.576 1.576 0 00-2.277.42l-2.567 3.98a.659.659 0 00.961.875l2.556-2.049a.63.63 0 01.759-.002l2.452 1.84a1.576 1.576 0 002.278-.42z" fillRule="evenodd"></path></svg>
+                    <svg className={`${location.pathname.indexOf("/user/") !== -1 ? "hidden" : ""} mx-3`} aria-label="Messenger" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M12.003 2.001a9.705 9.705 0 110 19.4 10.876 10.876 0 01-2.895-.384.798.798 0 00-.533.04l-1.984.876a.801.801 0 01-1.123-.708l-.054-1.78a.806.806 0 00-.27-.569 9.49 9.49 0 01-3.14-7.175 9.65 9.65 0 0110-9.7z" fill="none" stroke="currentColor" strokeMiterlimit="10" strokeWidth="1.739"></path><path d="M17.79 10.132a.659.659 0 00-.962-.873l-2.556 2.05a.63.63 0 01-.758.002L11.06 9.47a1.576 1.576 0 00-2.277.42l-2.567 3.98a.659.659 0 00.961.875l2.556-2.049a.63.63 0 01.759-.002l2.452 1.84a1.576 1.576 0 002.278-.42z" fillRule="evenodd"></path></svg>
                 </Link>
                 {/* New Post */}
                 <button onClick={(event) => {
@@ -176,7 +186,7 @@ export function DesktopNav() {
                     </div>
                 </div>
             </div>
-        </nav>
+        </nav >
 
     )
 }

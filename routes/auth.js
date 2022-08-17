@@ -71,7 +71,8 @@ router.post('/register', [
             name,
             followers: [],
             following: [],
-            posts: [postDetails._id]
+            posts: [],
+            bio: "",
         });
         const data = {
             user: {

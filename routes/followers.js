@@ -35,7 +35,7 @@ router.post('/add_following', fetchUser, [
             data = {
                 userid: cUser._id,
                 followers: [],
-                following: [user._id],
+                following: [user.username],
                 posts: []
             };
             await UserInfo.create(data);
@@ -43,8 +43,8 @@ router.post('/add_following', fetchUser, [
         else {
             let followingList = data.following;
             // check if the user is already in following list
-            if (followingList.indexOf(user._id) === -1) {
-                followingList.push(user._id);
+            if (followingList.indexOf(user.username) === -1) {
+                followingList.push(user.username);
                 await UserInfo.updateOne({ _id: data._id }, {
                     $set: { "following": followingList }
                 });
@@ -56,7 +56,7 @@ router.post('/add_following', fetchUser, [
         if (!data2) {
             await UserInfo.create({
                 userid: user._id,
-                followers: [cUser._id],
+                followers: [cUser.username],
                 following: [],
                 posts: []
             })
@@ -64,8 +64,8 @@ router.post('/add_following', fetchUser, [
         else {
             let followerList = data2.followers;
             // check if the user is already not in the follower list
-            if (followerList.indexOf(cUser._id) === -1) {
-                followerList.push(cUser._id);
+            if (followerList.indexOf(cUser.username) === -1) {
+                followerList.push(cUser.username);
                 await UserInfo.updateOne({ _id: data2._id }, {
                     $set: { "followers": followerList }
                 });
@@ -73,6 +73,7 @@ router.post('/add_following', fetchUser, [
         }
         res.send("DONE");
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Internal Server Error Occurred! Try again later" });
     }
 });
@@ -104,7 +105,7 @@ router.post('/delete_following', fetchUser, [
         if (data) {
             let followingList = data.following;
             followingList = followingList.filter((item) => {
-                return item === user._id;
+                return item !== user.username;
             });
             await UserInfo.updateOne({ _id: data._id }, {
                 $set: { "following": followingList }
@@ -116,7 +117,7 @@ router.post('/delete_following', fetchUser, [
         if (data2) {
             let followerList = data2.followers;
             followerList = followerList.filter((item) => {
-                return item === cUser._id;
+                return item !== cUser.username;
             });
 
             await UserInfo.updateOne({ _id: data2._id }, {

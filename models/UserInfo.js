@@ -13,12 +13,10 @@ const UserInfoSchema = new Schema({
         type: String,
     },
     followers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        type: String,
     }],
     following: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        type: String,
     }],
     posts: [{
         type: mongoose.Schema.Types.ObjectId,
