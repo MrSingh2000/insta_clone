@@ -8,8 +8,10 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
 function MyProfile() {
-  const [profileDrop, setProfileDrop] = useState(false);
   let dispatch = useDispatch();
+  let adminDetails = useSelector((store) => store.userDetails.value);
+
+  const [profileDrop, setProfileDrop] = useState(false);
   let authToken = useSelector((store) => store.authToken.value);
   const posts = useSelector((state) => state.userPost.value);
 
@@ -29,7 +31,7 @@ function MyProfile() {
             <div>
               {/* username block */}
               <div className="flex justify-between items-center ">
-                <p className="m-2 font-thin text-3xl">mr_singh2000</p>
+                <p className="m-2 font-thin text-3xl">{adminDetails.username}</p>
                 <button className="m-2 border-2 p-1 rounded-lg font-medium sm:block hidden">Edit Profile</button>
                 <RiSettings3Line className="m-2" size="25px" />
               </div>
@@ -38,18 +40,15 @@ function MyProfile() {
               </div>
               {/* followers block */}
               <div className="flex justify-between items-center mt-2 m-2">
-                <p><b>46</b> posts</p>
-                <p><b>1,696</b> followers</p>
-                <p><b>677</b> following</p>
+                <p><b>{adminDetails.posts.length}</b> posts</p>
+                <p><b>{adminDetails.followers.length}</b> followers</p>
+                <p><b>{adminDetails.following.length}</b> following</p>
               </div>
               {/* bio block */}
               <div className="m-2">
-                <p className="font-bold">User's real name</p>
+                <p className="font-bold">{adminDetails.name}</p>
                 <p>
-                  ❄️ ਨਿਰਭਓ ਨਿਰਵੈਰ ❄️ <br />
-                  💪 ਹਰ ਮੈਦਾਨ ਫਤਿਹ 💪<br />
-                  #2percent <br />
-                  🎓 DCRUST
+                  {adminDetails.bio}
                 </p>
               </div>
             </div>

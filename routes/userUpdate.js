@@ -16,8 +16,8 @@ router.post('/name', fetchUser, async (req, res) => {
             return res.status(404).json({ error: "Invalid User Login" });
         }
         let newName = req.body.name;
-        await UserInfo.updateOne({userid: cUser._id}, {
-            $set: {"name": newName}
+        await UserInfo.updateOne({ userid: cUser._id }, {
+            $set: { "name": newName }
         });
         res.send("success");
     } catch (error) {
@@ -34,8 +34,8 @@ router.post('/bio', fetchUser, async (req, res) => {
             return res.status(404).json({ error: "Invalid User Login" });
         }
         let newBio = req.body.bio;
-        await UserInfo.updateOne({userid: cUser._id}, {
-            $set: {"bio": newBio}
+        await UserInfo.updateOne({ userid: cUser._id }, {
+            $set: { "bio": newBio }
         });
         res.send("success");
     } catch (error) {
@@ -44,7 +44,7 @@ router.post('/bio', fetchUser, async (req, res) => {
 });
 
 // ROUTE 3: send user's details
-router.get('/get_details',fetchUser, async (req, res) => {
+router.get('/get_details', fetchUser, async (req, res) => {
     try {
         // get the valid info about logged in user
         let cUser = req.user.id;
@@ -52,7 +52,17 @@ router.get('/get_details',fetchUser, async (req, res) => {
         if (!cUser) {
             return res.status(404).json({ error: "Invalid User Login" });
         }
-        let details = await UserInfo.findOne({userid: cUser._id});
+        let details = await UserInfo.findOne({ userid: cUser._id });
+        details = {
+            _id: details._id,
+            userid: details.userid,
+            followers: details.followers,
+            following: details.following,
+            posts: details.posts,
+            name: details.name,
+            bio: details.bio,
+            username: cUser.username,
+        }
         res.json(details);
     } catch (error) {
         console.log(error);
