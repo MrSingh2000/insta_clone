@@ -1,19 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import logo from '../static/login/login_logo.png';
-import mainProfile from "../static/home/mainpp.jpg";
+import React, { useState, useEffect, useRef } from 'react';
+import nopp from '../../static/home/no_pp.jpg';
 import { RiSettings3Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { DesktopNav, MobileNav } from "./Navbar";
+import { DesktopNav, MobileNav } from "../Navbar";
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { BsCameraFill } from 'react-icons/bs';
+import { useGetUserDetails, useUploadFile } from '../common/functions';
 
 function MyProfile() {
   let dispatch = useDispatch();
+  let [uploadFile] =  useUploadFile();
+
   let adminDetails = useSelector((store) => store.userDetails.value);
 
   const [profileDrop, setProfileDrop] = useState(false);
   let authToken = useSelector((store) => store.authToken.value);
   const posts = useSelector((state) => state.userPost.value);
+
+  const inputRef = useRef(null);
+  const handlePic = () => {
+    inputRef.current.click();
+  }
 
   return (
     <>
@@ -25,8 +33,15 @@ function MyProfile() {
         {/* Main content */}
         <div className="flex flex-col justify-start w-full lg:w-2/3 mt-6">
           <div className="flex">
-            <div className="sm:p-16">
-              <img className="rounded-full" src={mainProfile} alt="pp" />
+            <div onClick={handlePic} className="sm:p-16 flex justify-center items-center">
+              <img  className="hover:z-0 z-10 rounded-full profilePic max-h-36" src={adminDetails.pic ? adminDetails.pic : nopp} alt="pp" />
+              <div className="flex justify-center items-center max-h-36 h-full max-w-[9rem] w-full bg-gray-200 opacity-50 rounded-full absolute">
+                <BsCameraFill size={50} className="" />
+              </div>
+              {/* <img src={nopp} className="rounded-full absolute max-h-36 profilePicFloat" alt="none" /> */}
+              <input onChange={(e) => {
+                uploadFile(e.target.files[0], "pic");
+              }} ref={inputRef} type="file" className="hidden" />
             </div>
             <div>
               {/* username block */}
@@ -39,10 +54,16 @@ function MyProfile() {
                 <button className="border-2 p-1 rounded-lg font-medium sm:hidden block w-4/5">Edit Profile</button>
               </div>
               {/* followers block */}
-              <div className="flex justify-between items-center mt-2 m-2">
-                <p><b>{adminDetails.posts.length}</b> posts</p>
-                <p><b>{adminDetails.followers.length}</b> followers</p>
-                <p><b>{adminDetails.following.length}</b> following</p>
+              <div className="flex justify-between items-center mt-2 m-2 text-sm sm:text-base">
+                <p className="mr-2"><b>{adminDetails.posts.length}</b> posts</p>
+                <Link to={"followers"} state={{
+                  following: adminDetails.following,
+                  followers: adminDetails.followers
+                }} className="mr-2"><b>{adminDetails.followers.length}</b> followers</Link>
+                <Link to={"following"} state={{
+                  following: adminDetails.following,
+                  followers: adminDetails.followers
+                }} className="mr-2 sm:mr-0"><b>{adminDetails.following.length}</b> following</Link>
               </div>
               {/* bio block */}
               <div className="m-2">

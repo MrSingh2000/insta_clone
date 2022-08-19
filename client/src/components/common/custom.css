@@ -1,3 +1,15 @@
+/* .profilePic{
+  visibility:visible;
+  z-index: 1;
+}
+.profilePic:hover{
+  visibility: hidden;
+}
+.profilePicFloat{
+  z-index: 0;
+} */
+
+/* Loader css */
 .loader {
   animation: rotate 1s infinite;
   height: 50px;

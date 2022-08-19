@@ -1,34 +1,24 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import nopp from "../static/home/no_pp.jpg";
 import logo from '../static/login/login_logo.png';
-import mainProfile from "../static/home/mainpp.jpg";
 import axios from 'axios';
 import { setLoading } from './state/reducers/loadingReducer';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
+import { useUploadFile } from './common/functions';
+import { useSelector } from 'react-redux';
 
 export function DesktopNav() {
     let location = useLocation();
     let navigate = useNavigate();
     let dispatch = useDispatch();
+    let authToken = useSelector((store) => store.authToken.value);
+    let [uploadFile] = useUploadFile();
+    let adminDetails = useSelector((store) => store.userDetails.value);
 
     // console.log(process.env.REACT_APP_AUTH_TOKEN);
     const [profileDrop, setProfileDrop] = useState(false);
     const [searchList, setSearchList] = useState([]);
-
-    const uploadPost = (file) => {
-        let data = new FormData();
-        data.append("post", file);
-        axios({
-            method: 'post',
-            url: `${process.env.REACT_APP_HOST}/api/post/add_post`,
-            headers: {
-                "authToken": process.env.REACT_APP_AUTH_TOKEN,
-                "Content-Type": "ultipart/form-data",
-            }
-        }).then((res) => {
-            console.log(res);
-        })
-    }
 
     const searchUser = (e) => {
         let username = e.target.value;
@@ -55,9 +45,45 @@ export function DesktopNav() {
         body.classList.toggle('modal-active');
     }
 
+    const handleUploadFile = (e) => {
+        uploadFile(e.target.files[0], "post");
+    }
+
+    // function to get the user details, admin want to see
+    const getProfileDetails = (userId) => {
+        dispatch(setLoading({ value: true }));
+        axios({
+            method: 'get',
+            url: `${process.env.REACT_APP_HOST}/api/search/user/${userId}`,
+            headers: {
+                'authToken': authToken
+            }
+        }).then(function (res) {
+            console.log("runned");
+            // get post's urls
+            axios({
+                method: 'get',
+                url: `${process.env.REACT_APP_HOST}/api/post/post_url/${userId}`,
+                headers: {
+                    'authToken': process.env.REACT_APP_AUTH_TOKEN
+                }
+            }).then((response) => {
+                console.log(response);
+                dispatch(setLoading({ value: false }));
+                navigate(`/user/${userId}`, { state: { posts: response.data.posts, userDetails: res.data } });
+            }).catch((err) => {
+                console.log(err.response.data.error);
+                dispatch(setLoading({ value: false }));
+            })
+        }).catch((err) => {
+            console.log(err.response.data.error);
+            dispatch(setLoading({ value: false }));
+        });
+    }
+
     const openUser = (username) => {
-        dispatch(setLoading({value: true}));
-        navigate(`/user/${username}`);
+        dispatch(setLoading({ value: true }));
+        getProfileDetails(username);
     }
 
     return (
@@ -65,7 +91,7 @@ export function DesktopNav() {
             {location.pathname.indexOf("/user/") === -1 ? (
                 // Camera icon
                 <>
-                <svg aria-label="New Story" className='sm:hidden mx-3' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><circle cx="12" cy="13.191" fill="none" r="4.539" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></circle><path d="M18.592 21.374A3.408 3.408 0 0022 17.966V8.874a3.41 3.41 0 00-3.41-3.409h-.52a2.108 2.108 0 01-1.954-1.375 2.082 2.082 0 00-2.204-1.348h-3.824A2.082 2.082 0 007.884 4.09 2.108 2.108 0 015.93 5.465h-.52A3.41 3.41 0 002 8.875v9.091a3.408 3.408 0 003.408 3.408z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path></svg>
+                    <svg aria-label="New Story" className='sm:hidden mx-3' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><circle cx="12" cy="13.191" fill="none" r="4.539" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></circle><path d="M18.592 21.374A3.408 3.408 0 0022 17.966V8.874a3.41 3.41 0 00-3.41-3.409h-.52a2.108 2.108 0 01-1.954-1.375 2.082 2.082 0 00-2.204-1.348h-3.824A2.082 2.082 0 007.884 4.09 2.108 2.108 0 015.93 5.465h-.52A3.41 3.41 0 002 8.875v9.091a3.408 3.408 0 003.408 3.408z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2"></path></svg>
                 </>
             ) : (
                 // back button in case of a profile is searched
@@ -123,7 +149,7 @@ export function DesktopNav() {
                 <div className="relative inline-block text-left md:block hidden">
                     <div>
                         <button onClick={() => { setProfileDrop((prevState) => !prevState) }} type="button" className="flex items-center justify-center w-6 h-6 rounded-lg" id="options-menu">
-                            <img alt="mr_singh2000's profile picture" className="rounded-lg" crossOrigin="anonymous" draggable="false" src={mainProfile} />
+                            <img alt="mr_singh2000's profile picture" className="rounded-lg" draggable="false" src={adminDetails.pic ? adminDetails.pic : nopp} />
                         </button>
                     </div>
                     <div className={`${profileDrop ? "block" : "hidden"} origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5`}>
@@ -177,7 +203,7 @@ export function DesktopNav() {
                                     <svg aria-label="Icon to represent media such as images or videos" className="_ab6-" color="#262626" fill="#262626" height="77" role="img" viewBox="0 0 97.6 77.3" width="96"><path d="M16.3 24h.3c2.8-.2 4.9-2.6 4.8-5.4-.2-2.8-2.6-4.9-5.4-4.8s-4.9 2.6-4.8 5.4c.1 2.7 2.4 4.8 5.1 4.8zm-2.4-7.2c.5-.6 1.3-1 2.1-1h.2c1.7 0 3.1 1.4 3.1 3.1 0 1.7-1.4 3.1-3.1 3.1-1.7 0-3.1-1.4-3.1-3.1 0-.8.3-1.5.8-2.1z" fill="currentColor"></path><path d="M84.7 18.4L58 16.9l-.2-3c-.3-5.7-5.2-10.1-11-9.8L12.9 6c-5.7.3-10.1 5.3-9.8 11L5 51v.8c.7 5.2 5.1 9.1 10.3 9.1h.6l21.7-1.2v.6c-.3 5.7 4 10.7 9.8 11l34 2h.6c5.5 0 10.1-4.3 10.4-9.8l2-34c.4-5.8-4-10.7-9.7-11.1zM7.2 10.8C8.7 9.1 10.8 8.1 13 8l34-1.9c4.6-.3 8.6 3.3 8.9 7.9l.2 2.8-5.3-.3c-5.7-.3-10.7 4-11 9.8l-.6 9.5-9.5 10.7c-.2.3-.6.4-1 .5-.4 0-.7-.1-1-.4l-7.8-7c-1.4-1.3-3.5-1.1-4.8.3L7 49 5.2 17c-.2-2.3.6-4.5 2-6.2zm8.7 48c-4.3.2-8.1-2.8-8.8-7.1l9.4-10.5c.2-.3.6-.4 1-.5.4 0 .7.1 1 .4l7.8 7c.7.6 1.6.9 2.5.9.9 0 1.7-.5 2.3-1.1l7.8-8.8-1.1 18.6-21.9 1.1zm76.5-29.5l-2 34c-.3 4.6-4.3 8.2-8.9 7.9l-34-2c-4.6-.3-8.2-4.3-7.9-8.9l2-34c.3-4.4 3.9-7.9 8.4-7.9h.5l34 2c4.7.3 8.2 4.3 7.9 8.9z" fill="currentColor"></path><path d="M78.2 41.6L61.3 30.5c-2.1-1.4-4.9-.8-6.2 1.3-.4.7-.7 1.4-.7 2.2l-1.2 20.1c-.1 2.5 1.7 4.6 4.2 4.8h.3c.7 0 1.4-.2 2-.5l18-9c2.2-1.1 3.1-3.8 2-6-.4-.7-.9-1.3-1.5-1.8zm-1.4 6l-18 9c-.4.2-.8.3-1.3.3-.4 0-.9-.2-1.2-.4-.7-.5-1.2-1.3-1.1-2.2l1.2-20.1c.1-.9.6-1.7 1.4-2.1.8-.4 1.7-.3 2.5.1L77 43.3c1.2.8 1.5 2.3.7 3.4-.2.4-.5.7-.9.9z" fill="currentColor"></path></svg>
                                     <p className="text-2xl font-light mb-4">Drag photos and videos here</p>
                                     <label className="fileLabel">
-                                        <input onChange={(e) => uploadPost(e.target.files[0])} type="file" />
+                                        <input onChange={(e) => handleUploadFile(e)} type="file" />
                                         <span>Select from computer</span>
                                     </label>
                                 </div>
@@ -192,6 +218,7 @@ export function DesktopNav() {
 }
 
 export function MobileNav() {
+    let adminDetails = useSelector((store) => store.userDetails.value);
 
     const uploadPost = (file) => {
         let data = new FormData();
@@ -231,9 +258,24 @@ export function MobileNav() {
                 </Link>
                 {/* profile pic */}
                 <Link to="/myprofile" style={{ width: '24px', height: '24px' }}>
-                    <span className="md:hidden rounded-lg" role="link" tabIndex="0" style={{ width: '24px', height: '24px' }}><img alt="mr_singh2000's profile picture" className="rounded-lg" crossOrigin="anonymous" draggable="false" src={mainProfile} /></span>
+                    <span className="md:hidden rounded-lg" role="link" tabIndex="0" style={{ width: '24px', height: '24px' }}><img alt="mr_singh2000's profile picture" className="rounded-lg" draggable="false" src={adminDetails.pic ? adminDetails.pic : nopp} /></span>
                 </Link>
             </div>
         </div>
+    )
+}
+
+export function FollowNav(props) {
+    let navigate = useNavigate();
+    let { header } = props;
+    return (
+        <nav className="h-fit p-2 flex items-center m-auto w-full lg:w-2/3 md:justif-around justify-between border-b-2 border-gray-200">
+            <div className="w-full border-grey-200 bg-white p-2">
+                <div className="flex justify-around w-full items-center">
+                    <svg onClick={() => navigate(-1)} aria-label="Back" className='-rotate-90' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M21 17.502a.997.997 0 01-.707-.293L12 8.913l-8.293 8.296a1 1 0 11-1.414-1.414l9-9.004a1.03 1.03 0 011.414 0l9 9.004A1 1 0 0121 17.502z"></path></svg>
+                    <p className="w-full text-center font-semibold text-lg capitalize">{header}</p>
+                </div>
+            </div>
+        </nav>
     )
 }

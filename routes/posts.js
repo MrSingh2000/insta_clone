@@ -26,6 +26,7 @@ router.post('/add_post', [upload.single('post'), fetchUser], async (req, res) =>
         if (!user) {
             return res.status(404).json({ error: "Invalid Login" });
         }
+        console.log(req.file, req.body);
         // checking if the file is uploaded properly to the cloud and the post url is saved in req
         if (!req.file.url) {
             return res.status(500).json({ error: "Cloud Error! Try again Later." });
@@ -61,6 +62,7 @@ router.post('/add_post', [upload.single('post'), fetchUser], async (req, res) =>
         }
         res.json({ posts });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Internal Server Error Occurred! Try again later" });
     }
 });
@@ -171,7 +173,7 @@ router.post('/delete_story/:storyUrl', fetchUser, async (req, res) => {
     }
 });
 
-// Route 5: route to get Posts
+// Route 5: route to get Posts of admin
 router.get('/get_posts', fetchUser, async (req, res) => {
     try {
         // user authenticaton
@@ -200,7 +202,7 @@ router.get('/get_posts', fetchUser, async (req, res) => {
 });
 
 
-// Route 6: get any users Posts
+// Route 6: get any users Posts (for fetching admin post's use ROUTE: 5)
 router.get('/post_url/:otherUser', fetchUser, async (req, res) => {
     try {
         // user authenticaton
@@ -227,6 +229,25 @@ router.get('/post_url/:otherUser', fetchUser, async (req, res) => {
             postUrls.push(url.url);
         }
         res.json({ posts: postUrls });
+    }
+    catch {
+        res.status(500).json({ error: "Internal Server Error Occurred! Try again later" });
+    }
+});
+
+// ROUTE 7: fetch the posts by post's id
+router.post('/fetch_posts', fetchUser, async (req, res) => {
+    try {
+        // user authenticaton
+        let user = req.user.id;
+        user = await User.findById(user);
+        if (!user) {
+            return res.status(404).json({ error: "Invalid Login" });
+        }
+        
+        // get posts id array from the request
+        // res.json({ posts: postUrls });
+        res.send("Success");
     }
     catch {
         res.status(500).json({ error: "Internal Server Error Occurred! Try again later" });

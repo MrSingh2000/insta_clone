@@ -1,69 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../static/login/login_logo.png';
-import mainProfile from "../static/home/mainpp.jpg";
+import logo from '../../static/login/login_logo.png';
+import nopp from "../../static/home/no_pp.jpg";
 import { RiSettings3Line } from "react-icons/ri";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { DesktopNav, MobileNav } from "./Navbar";
+import { DesktopNav, MobileNav } from "../Navbar";
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading } from './state/reducers/loadingReducer';
-import Loader from './common/Loader';
-import { updateUserDetails } from './state/reducers/userDetailsReducer';
+import { setLoading } from '../state/reducers/loadingReducer';
+import Loader from '../common/Loader';
+import { updateUserDetails } from '../state/reducers/userDetailsReducer';
+import { useGetUserDetails } from '../common/functions';
 
 function OtherProfile() {
     let location = useLocation();
-    let loading = useSelector((store) => store.loading.value);
+    let {userDetails, posts} = location.state;
     let dispatch = useDispatch();
+    let [getUserDetails, getOtherUserDetails] = useGetUserDetails();
 
     let authToken = useSelector((store) => store.authToken.value);
 
     let params = useParams();
     let userId = params.userId;
 
-    const [userDetails, setUserDetails] = useState(null);
-    const [posts, setPosts] = useState([]);
-
     let admin = useSelector((store) => store.userDetails.value);
-
-    // get the profile details of this user
-    const getProfileDetails = () => {
-        dispatch(setLoading({ value: true }));
-        axios({
-            method: 'get',
-            url: `${process.env.REACT_APP_HOST}/api/search/user/${userId}`,
-            headers: {
-                'authToken': authToken
-            }
-        }).then(function (res) {
-            setUserDetails(res.data);
-            console.log("runned");
-            // get post's urls
-            axios({
-                method: 'get',
-                url: `${process.env.REACT_APP_HOST}/api/post/post_url/${userId}`,
-                headers: {
-                    'authToken': process.env.REACT_APP_AUTH_TOKEN
-                }
-            }).then((res) => {
-                setPosts(res.data.posts);
-                dispatch(setLoading({ value: false }));
-            }).catch((err) => {
-                console.log(err.response.data.error);
-                dispatch(setLoading({ value: false }));
-            })
-        }).catch((err) => {
-            console.log(err.response.data.error);
-            dispatch(setLoading({ value: false }));
-        });
-    }
-
-    useEffect(() => {
-        getProfileDetails();
-    }, [userId]);
 
     const handleFollow = () => {
         dispatch(setLoading({ value: true }));
-
+        
         if (admin?.following?.indexOf(userId) !== -1) {
             // this code runs if the user is already followed
             // req sent to server to unfollow the person
@@ -76,22 +39,12 @@ function OtherProfile() {
                 data: {
                     userId
                 }
-            }).then(function (res) {
+            }).then(async function (res) {
                 // again refresh the admin's details by sending new req. to the server
-                axios({
-                    method: 'get',
-                    url: `${process.env.REACT_APP_HOST}/api/update/get_details`,
-                    headers: {
-                        'authToken': process.env.REACT_APP_AUTH_TOKEN
-                    }
-                }).then((res) => {
-                    dispatch(updateUserDetails(res.data));
-                    // either user is followed or not, we need to refresh the user details
-                    getProfileDetails();
-                }).catch((err) => {
-                    console.log(err);
-                    dispatch(setLoading({ value: false }));
-                });
+                getUserDetails("admin", false);
+                // FIXME: user's details must be refreshed
+                // userDetails = getOtherUserDetails(userId);
+                dispatch(setLoading({value: false}));
 
             }).catch((err) => {
                 console.log(err.response.data.error);
@@ -110,24 +63,12 @@ function OtherProfile() {
                 data: {
                     userId
                 }
-            }).then(function (res) {
-                console.log(res);
+            }).then(async function (res) {
                 // again refresh the admin's details by sending new req. to the server
-                axios({
-                    method: 'get',
-                    url: `${process.env.REACT_APP_HOST}/api/update/get_details`,
-                    headers: {
-                        'authToken': process.env.REACT_APP_AUTH_TOKEN
-                    }
-                }).then((res) => {
-                    dispatch(updateUserDetails(res.data));
-                    // either user is followed or not, we need to refresh the user details
-                    getProfileDetails();
-                }).catch((err) => {
-                    console.log(err);
-                    dispatch(setLoading({ value: false }));
-                });
-
+                getUserDetails("admin", false);
+                // FIXME: user's details must be refreshed
+                // userDetails = getOtherUserDetails(userId);
+                dispatch(setLoading({value: false}));
             }).catch((err) => {
                 console.log(err.response.data.error);
                 dispatch(setLoading({ value: false }));
@@ -136,7 +77,7 @@ function OtherProfile() {
     }
 
 
-    return loading ? (<Loader />) : (
+    return(
         <>
             <div className="flex flex-col items-center">
 
@@ -147,7 +88,7 @@ function OtherProfile() {
                 <div className="flex flex-col justify-start w-full lg:w-2/3 mt-6">
                     <div className="flex">
                         <div className="sm:p-16">
-                            <img className="rounded-full" src={mainProfile} alt="pp" />
+                            <img className="rounded-full max-h-36" src={userDetails?.pic ? userDetails.pic : nopp} alt="pp" />
                         </div>
                         <div>
                             {/* username block */}
@@ -162,9 +103,9 @@ function OtherProfile() {
                             </div>
                             {/* followers block */}
                             <div className="flex justify-between items-center mt-2 m-2 w-full">
-                                <p><b>{userDetails.posts.length}</b> posts</p>
-                                <p><b>{userDetails.followers.length}</b> followers</p>
-                                <p><b>{userDetails.following.length}</b> following</p>
+                                <p><b>{userDetails?.posts?.length}</b> posts</p>
+                                <p><b>{userDetails?.followers?.length}</b> followers</p>
+                                <p><b>{userDetails?.following?.length}</b> following</p>
                             </div>
                             {/* bio block */}
                             <div className="m-2">
