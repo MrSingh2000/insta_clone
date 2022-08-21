@@ -4,6 +4,7 @@ import postReducer from "./postReducer";
 import userPostReducer from "./userPostReducer";
 import userDetailsReducer from "./userDetailsReducer";
 import loadingReducer from "./loadingReducer";
+import adminChatreducer from "./adminChatreducer";
 
 
 const reducers = combineReducers({
@@ -12,6 +13,7 @@ const reducers = combineReducers({
     userPost: userPostReducer,
     userDetails: userDetailsReducer,
     loading: loadingReducer,
+    adminChat: adminChatreducer
 });
 
 export default reducers;

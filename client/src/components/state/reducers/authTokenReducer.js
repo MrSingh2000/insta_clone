@@ -20,15 +20,12 @@ export const authTokenSlice = createSlice({
     name: 'authToken',
     initialState,
     reducers: {
-        set: (state, action) => {
-            state.value = action.payload.value
-        },
-        remove: (state) => {
-            state.value = ""
+        setAuthToken: (state, action) => {
+            state.value = action.payload
         },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { set, remove } = authTokenSlice.actions
+export const { setAuthToken } = authTokenSlice.actions
 export default authTokenSlice.reducer

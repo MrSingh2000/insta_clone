@@ -21,6 +21,7 @@ app.use('/api/user', require('./routes/followers'));
 app.use('/api/post', require('./routes/posts'));
 app.use('/api/search', require('./routes/search'));
 app.use('/api/update', require('./routes/userUpdate'));
+app.use('/api/chat', require('./routes/chat'));
 
 
 app.listen(port, () => {

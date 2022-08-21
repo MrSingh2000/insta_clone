@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../state/reducers/loadingReducer";
 import { updateUserDetails } from "../state/reducers/userDetailsReducer";
 import { updatePosts } from "../state/reducers/userPostReducer";
+import { updateAdminChat } from '../state/reducers/adminChatreducer';
+import { connectToSocketServer } from '../../socket';
 
 // THESE ARE CUSTOM REACT HOOKS
 
@@ -102,6 +104,9 @@ export function useGetUserDetails(props) {
                 }
             }).then((res) => {
                 dispatch(updateUserDetails(res.data));
+                connectToSocketServer(res.data.username);
+                connectToSocketServer("Harry");
+                connectToSocketServer("Lincoln");
                 if (posts) {
                     getPostUrls(res.data.posts);
                 }
@@ -141,4 +146,27 @@ export function useGetUserDetails(props) {
     }
 
     return [getUserDetails, getOtherUserDetails];
+}
+
+export function useAdminChat(props) {
+    let dispatch = useDispatch();
+    let authToken = useSelector((store) => store.authToken.value);
+
+    useEffect(() => {
+        dispatch(setLoading({ value: true }));
+        axios({
+            method: 'get',
+            url: `${process.env.REACT_APP_HOST}/api/chat/get_chats`,
+            headers: {
+                "authToken": authToken,
+            }
+        }).then((res) => {
+            dispatch(updateAdminChat(res.data.chats.chats));
+            dispatch(setLoading({ value: false }));
+        }).catch((err) => {
+            console.log(err);
+            dispatch(setLoading({ value: false }));
+        })
+    }, []);
+
 }

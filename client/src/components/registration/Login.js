@@ -11,25 +11,34 @@ import ss4 from "../../static/login/ss4.png";
 import { AiFillFacebook } from 'react-icons/ai';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useRef } from 'react';
 
 
 export default function Login() {
+    const [details, setDetails] = useState({ username: "", password: "" });
 
     const [ss, setss] = useState(0);
+    const type = useRef(true);
     let ssArr = [ss1, ss2, ss3, ss4];
+    let ssInterval;
 
-    const changess = () => {
-        setTimeout(() => {
-            setss((prevss) => {
-                return (prevss === ssArr.length - 1 ? 0 : prevss + 1);
-            });
-        }, 2500);
+    if (type.current === true) {
+        ssInterval = setInterval(() => {
+            setss((ss + 1) % 4);
+        }, 3000);
     }
-    
+
     useEffect(() => {
-      changess();
+        if (type.current === false) {
+            clearInterval(ssInterval);
+        }
     })
-    
+
+    const handleChange = (e) => {
+        type.current = false;
+        setDetails({ ...details, [e.target.name]: e.target.value });
+    }
+
     return (
         <div className="main flex-row">
             <div className="left hidden lg:flex justifu-center items-center ">
@@ -48,12 +57,12 @@ export default function Login() {
                             <form action="#">
                                 <div className="flex flex-col mb-2">
                                     <div className=" relative ">
-                                        <input type="text" id="create-account-pseudo" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="username" placeholder="Phone number, username or email" />
+                                        <input onChange={(e) => handleChange(e)} type="text" id="create-account-pseudo" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="username" placeholder="Phone number, username or email" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col mb-2">
                                     <div className=" relative ">
-                                        <input type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="password" placeholder="Password" />
+                                        <input onChange={(e) => handleChange(e)} type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="password" placeholder="Password" />
                                     </div>
                                 </div>
                                 <div className="flex w-full my-4">
@@ -88,11 +97,11 @@ export default function Login() {
                 {/* Download badges block */}
                 <div>
                     <div className="p-3 text-center">
-                      <p>Get the app </p>
+                        <p>Get the app </p>
                     </div>
                     <div className="flex justify-center">
-                        <img src={googlePlayDownload} alt="googleplay" className="h-10 w-auto mr-1"/>
-                        <img src={appstoreDonwlaod} alt="appstore" className="h-10 w-auto"/>
+                        <img src={googlePlayDownload} alt="googleplay" className="h-10 w-auto mr-1" />
+                        <img src={appstoreDonwlaod} alt="appstore" className="h-10 w-auto" />
                     </div>
                 </div>
 

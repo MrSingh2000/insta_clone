@@ -87,7 +87,7 @@ export function DesktopNav() {
     }
 
     return (
-        <nav className="h-fit p-2 flex items-center m-auto w-full lg:w-2/3 md:justif-around justify-between border-b-2 border-gray-200">
+        <nav className="h-fit p-2 flex items-center mx-auto w-full lg:w-2/3 justify-between border-b-2 border-gray-200">
             {location.pathname.indexOf("/user/") === -1 ? (
                 // Camera icon
                 <>
@@ -128,7 +128,7 @@ export function DesktopNav() {
                     <svg aria-label="Home" className="md:block hidden mx-3" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M22 23h-6.001a1 1 0 01-1-1v-5.455a2.997 2.997 0 10-5.993 0V22a1 1 0 01-1 1H2a1 1 0 01-1-1V11.543a1.002 1.002 0 01.31-.724l10-9.543a1.001 1.001 0 011.38 0l10 9.543a1.002 1.002 0 01.31.724V22a1 1 0 01-1 1z"></path></svg>
                 </Link>
                 {/* Messages */}
-                <Link to="/" className="cursor-pointer">
+                <Link to="/myprofile/chat" className="cursor-pointer">
                     <svg className={`${location.pathname.indexOf("/user/") !== -1 ? "hidden" : ""} mx-3`} aria-label="Messenger" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M12.003 2.001a9.705 9.705 0 110 19.4 10.876 10.876 0 01-2.895-.384.798.798 0 00-.533.04l-1.984.876a.801.801 0 01-1.123-.708l-.054-1.78a.806.806 0 00-.27-.569 9.49 9.49 0 01-3.14-7.175 9.65 9.65 0 0110-9.7z" fill="none" stroke="currentColor" strokeMiterlimit="10" strokeWidth="1.739"></path><path d="M17.79 10.132a.659.659 0 00-.962-.873l-2.556 2.05a.63.63 0 01-.758.002L11.06 9.47a1.576 1.576 0 00-2.277.42l-2.567 3.98a.659.659 0 00.961.875l2.556-2.049a.63.63 0 01.759-.002l2.452 1.84a1.576 1.576 0 002.278-.42z" fillRule="evenodd"></path></svg>
                 </Link>
                 {/* New Post */}
