@@ -12,10 +12,12 @@ import { AiFillFacebook } from 'react-icons/ai';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import { useLogin } from '../common/functions';
 
 
 export default function Login() {
     const [details, setDetails] = useState({ username: "", password: "" });
+    let [login] = useLogin();
 
     const [ss, setss] = useState(0);
     const type = useRef(true);
@@ -37,6 +39,11 @@ export default function Login() {
     const handleChange = (e) => {
         type.current = false;
         setDetails({ ...details, [e.target.name]: e.target.value });
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        login(details.username, details.password);
     }
 
     return (
@@ -66,7 +73,7 @@ export default function Login() {
                                     </div>
                                 </div>
                                 <div className="flex w-full my-4">
-                                    <button type="submit" className="py-2 px-4  bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 focus:ring-offset-sky-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                    <button onClick={(e) => handleSubmit(e)} type="submit" className="py-2 px-4  bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 focus:ring-offset-sky-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                                         Login
                                     </button>
                                 </div>

@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigationType, useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
 import Home from './components/Home';
 import Contact from './components/Contact';
@@ -17,18 +17,23 @@ import { useAdminChat, useGetUserDetails } from './components/common/functions';
 import Loader from './components/common/Loader';
 import { connectToSocketServer } from './socket';
 import Chat from './components/Chat';
+import { RequireAuth } from './components/registration/RequireAuth';
 
 function App() {
   let dispatch = useDispatch();
+  let authToken = useSelector((store) => store.authToken.value);
+
   let [getUserDetails] = useGetUserDetails();
-  useAdminChat();
 
   let loading = useSelector((store) => store.loading.value);
   let adminDetails = useSelector((store) => store.userDetails.value);
 
   useEffect(() => {
     // when logged in and authToken exists, get the user's posts 
-    getUserDetails("admin");
+    if (authToken || localStorage.getItem("authToken")) {
+      console.log("getting user detials");
+      getUserDetails("admin");
+    }
   }, []);
 
 
@@ -38,7 +43,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Nested Routing */}
-        <Route path="/" >
+        <Route path="/" element={<RequireAuth />}>
           <Route path="" element={<Home />} />
 
           <Route path="myprofile">

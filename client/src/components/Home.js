@@ -12,9 +12,11 @@ import { useEffect, useState } from 'react';
 import { DesktopNav, MobileNav } from "./Navbar";
 import { update } from './state/reducers/userPostReducer';
 import axios from 'axios';
+import { useAdminChat } from './common/functions';
 
 function Home() {
   const dispatch = useDispatch();
+  // useAdminChat();
   // profile menu dropdown
   const [profileDrop, setProfileDrop] = useState(false);
 

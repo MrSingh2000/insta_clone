@@ -6,12 +6,15 @@ import { updateUserDetails } from "../state/reducers/userDetailsReducer";
 import { updatePosts } from "../state/reducers/userPostReducer";
 import { updateAdminChat } from '../state/reducers/adminChatreducer';
 import { connectToSocketServer } from '../../socket';
+import authTokenReducer, { setAuthToken } from '../state/reducers/authTokenReducer';
+import { useNavigate, useNavigationType } from 'react-router-dom';
 
 // THESE ARE CUSTOM REACT HOOKS
 
 export function useUploadFile(props) {
     let dispatch = useDispatch();
     let [getUserDetails] = useGetUserDetails();
+    let authToken = useSelector((store) => store.authToken.value);
 
     const uploadFile = (file, type) => {
         dispatch(setLoading({ value: true }));
@@ -30,7 +33,7 @@ export function useUploadFile(props) {
             method: 'post',
             url,
             headers: {
-                "authToken": process.env.REACT_APP_AUTH_TOKEN,
+                "authToken": authToken,
                 "Content-Type": "ultipart/form-data",
             },
             data
@@ -49,14 +52,16 @@ export function useUploadFile(props) {
 // works only to get Admin's posts
 export function useGetPostUrls(props) {
     let dispatch = useDispatch();
+    let authToken = useSelector((store) => store.authToken.value);
 
-    const getPostUrls = (posts) => {
+
+    const getPostUrls = (posts, token) => {
         // getting user posts
         axios({
             method: 'get',
             url: `${process.env.REACT_APP_HOST}/api/post/get_posts`,
             headers: {
-                'authToken': process.env.REACT_APP_AUTH_TOKEN
+                'authToken': authToken ? authToken : token
             }
         }).then((res) => {
             dispatch(updatePosts([...res.data.posts]));
@@ -73,7 +78,7 @@ export function useGetPostUrls(props) {
             method: 'get',
             url: `${process.env.REACT_APP_HOST}/api/post/post_url/${userId}`,
             headers: {
-                'authToken': process.env.REACT_APP_AUTH_TOKEN
+                'authToken': authToken
             }
         }).then((response) => {
             setPosts(response.data.posts);
@@ -93,14 +98,14 @@ export function useGetUserDetails(props) {
     let [getPostUrls, getOtherUserPosts] = useGetPostUrls();
     let authToken = useSelector((store) => store.authToken.value);
 
-    const getUserDetails = (userType, posts = true) => {
+    const getUserDetails = (userType, posts = true, token = null) => {
         if (userType === "admin") {
             // getting user Details
             axios({
                 method: 'get',
                 url: `${process.env.REACT_APP_HOST}/api/update/get_details`,
                 headers: {
-                    'authToken': process.env.REACT_APP_AUTH_TOKEN
+                    'authToken': authToken ? authToken : token
                 }
             }).then((res) => {
                 dispatch(updateUserDetails(res.data));
@@ -108,7 +113,7 @@ export function useGetUserDetails(props) {
                 connectToSocketServer("Harry");
                 connectToSocketServer("Lincoln");
                 if (posts) {
-                    getPostUrls(res.data.posts);
+                    getPostUrls(res.data.posts, token);
                 }
                 else {
                     dispatch(setLoading({ value: false }));
@@ -169,4 +174,34 @@ export function useAdminChat(props) {
         })
     }, []);
 
+}
+
+// Login function
+export function useLogin(props) {
+    let dispatch = useDispatch();
+    let navigate = useNavigate();
+    let [getUserDetails] = useGetUserDetails();
+
+    const login = (username, password) => {
+        dispatch(setLoading({ value: true }));
+        axios({
+            method: 'post',
+            url: `${process.env.REACT_APP_HOST}/api/auth/login`,
+            data: {
+                username,
+                password
+            }
+        }).then((res) => {
+            console.log(res.data);
+            dispatch(setAuthToken(res.data.authToken));
+            getUserDetails("admin", true, res.data.authToken);
+            localStorage.setItem("authToken", res.data.authToken);
+            navigate('/');
+        }).catch((err) => {
+            console.log(err);
+            dispatch(setLoading({ value: false }));
+        })
+    }
+
+    return [login];
 }
