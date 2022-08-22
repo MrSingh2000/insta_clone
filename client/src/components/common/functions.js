@@ -110,9 +110,23 @@ export function useGetUserDetails(props) {
             }).then((res) => {
                 dispatch(updateUserDetails(res.data));
                 connectToSocketServer(res.data.username);
-                connectToSocketServer("Harry");
-                connectToSocketServer("Lincoln");
+                // get admin chats
+                axios({
+                    method: 'get',
+                    url: `${process.env.REACT_APP_HOST}/api/chat/get_chats`,
+                    headers: {
+                        "authToken": authToken ? authToken : token,
+                    }
+                }).then((res) => {
+                    dispatch(updateAdminChat(res.data.chats.chats));
+                    dispatch(setLoading({ value: false }));
+                }).catch((err) => {
+                    console.log(err);
+                    dispatch(setLoading({ value: false }));
+                })
+
                 if (posts) {
+                    // get admin post's URLs
                     getPostUrls(res.data.posts, token);
                 }
                 else {
@@ -204,4 +218,30 @@ export function useLogin(props) {
     }
 
     return [login];
+}
+
+export function useChat(props) {
+    let authToken = useSelector((store) => store.authToken.value);
+    let dispatch = useDispatch();
+    let [getUserDetails] = useGetUserDetails();
+
+    const addChat = (username) => {
+        dispatch(setLoading({ value: true }));
+        axios({
+            method: 'put',
+            url: `${process.env.REACT_APP_HOST}/api/chat/new_user/${username}`,
+            headers: {
+                'authToken': authToken
+            }
+        }).then((res) => {
+            dispatch(updateAdminChat(res.data.chats.chats));
+            getUserDetails("admin", false);
+            dispatch(setLoading({ value: false }));
+        }).catch((err) => {
+            console.log(err.response.data.error);
+            dispatch(setLoading({ value: false }));
+        })
+    }
+
+    return [addChat];
 }

@@ -9,13 +9,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../state/reducers/loadingReducer';
 import Loader from '../common/Loader';
 import { updateUserDetails } from '../state/reducers/userDetailsReducer';
-import { useGetUserDetails } from '../common/functions';
+import { useChat, useGetUserDetails } from '../common/functions';
 
 function OtherProfile() {
     let location = useLocation();
     let {userDetails, posts} = location.state;
     let dispatch = useDispatch();
     let [getUserDetails, getOtherUserDetails] = useGetUserDetails();
+    let [addChat] = useChat();
 
     let authToken = useSelector((store) => store.authToken.value);
 
@@ -65,7 +66,8 @@ function OtherProfile() {
                 }
             }).then(async function (res) {
                 // again refresh the admin's details by sending new req. to the server
-                getUserDetails("admin", false);
+                // new entry in chat is created, update user details is handled within this function itself
+                addChat(userId);
                 // FIXME: user's details must be refreshed
                 // userDetails = getOtherUserDetails(userId);
                 dispatch(setLoading({value: false}));

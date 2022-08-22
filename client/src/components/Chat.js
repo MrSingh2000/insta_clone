@@ -23,11 +23,11 @@ function Chat() {
     }
 
     useEffect(() => {
-      socket.on("private message recieve", ({message, from}) => {
-          console.log(message, from);
-      })
+        socket.on("private message recieve", ({ message, from }) => {
+            console.log(message, from);
+        })
     })
-    
+
 
     return (
         <div className="flex flex-col items-center h-screen overflow-hidden">
@@ -38,7 +38,13 @@ function Chat() {
                     <p className="border-l-2 border-r-2">Username</p>
                     <div className="container border-t-2 border-l-2 border-r-2 flex flex-col mx-auto w-full items-center justify-center bg-white dark:bg-gray-800 shadow">
                         <ul className="flex flex-col divide divide-y w-full overflow-auto h-4/6">
-                            {chats.map((item, index) => {
+                            {chats?.length === 0 ? (
+                                <li className="h-20 flex justify-center items-center font-semibold text-sm">
+                                    <p>
+                                        No chats available
+                                    </p>
+                                </li>
+                            ) : chats?.map((item, index) => {
                                 return (
                                     <li key={item._id} onClick={() => handleClick(index)} className="flex flex-row w-full items-start">
                                         <div className="select-none cursor-pointer flex p-4">
@@ -93,11 +99,15 @@ function Chat() {
                                     <p className="font-semibold">{nowChat.friend}</p>
                                 </div>
 
-                                <div className="p-1 overflow-auto h-4/6">
+                                <div className="p-1 overflow-auto h-4/6 block">
                                     {/* <ul className="h-full overflow-auto"> */}
                                     {nowChat.chat.map((item) => {
                                         return (
-                                            <p key={item._id} className={`float-${item.from === 'a' ? 'right' : 'left'} clear-both m-1 p-1 rounded-lg bg-yellow-200`}>
+                                            <p key={item._id} style={{
+                                                float: `${item.from === 'a' ? 'right' : 'left'}`,
+                                                clear: 'both',
+                                                maxWidth: '20rem'
+                                            }} className={` m-1 p-1 rounded-lg bg-yellow-200`}>
                                                 {item.message}
                                             </p>
                                         )
