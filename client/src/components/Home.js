@@ -13,6 +13,7 @@ import { DesktopNav, MobileNav } from "./Navbar";
 import { update } from './state/reducers/userPostReducer';
 import axios from 'axios';
 import { useAdminChat } from './common/functions';
+import { socket } from '../socket';
 
 function Home() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function Home() {
     modal.classList.toggle('pointer-events-none');
     body.classList.toggle('modal-active');
   }
+
 
   return (
 

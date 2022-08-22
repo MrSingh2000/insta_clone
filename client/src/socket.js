@@ -9,7 +9,6 @@ export const connectToSocketServer = (username) => {
 }
 
 export const sendPrivateMessage = (username, message, from) => {
-    console.log('here')
     socket.emit("private message send", {
         username, message, from
     })

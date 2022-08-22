@@ -8,7 +8,7 @@ const UserInfo = require('../models/UserInfo');
 const Chat = require("../models/Chat");
 
 // Route 1: Route to add a user in chats
-router.put('/new_user/:friendId', fetchUser, async (req, res) => {
+router.post('/new_user/:friendId', fetchUser, async (req, res) => {
     try {
         // verify logged in user
         let cUser = req.user.id;

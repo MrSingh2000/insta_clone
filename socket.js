@@ -27,10 +27,9 @@ io.on("connection", socket => {
     })
 
     socket.on("private message send", ({ username, message, from }) => {
-        console.log("has: ", users.has("demo"))
         let to = users.get(username);
         if (!to) {
-            socket.emit("user offline", {username});
+            socket.to(to).emit("user offline", {username});
         }
         else{
             socket.to(to).emit("private message recieve", {message, from});

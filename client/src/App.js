@@ -13,17 +13,20 @@ import OtherProfile from './components/profile/OtherProfile';
 import { updateUserDetails } from './components/state/reducers/userDetailsReducer';
 import FollowList from './components/profile/FollowList';
 import Error from './components/Error';
-import { useAdminChat, useGetUserDetails } from './components/common/functions';
+import { useAdminChat, useChat, useGetUserDetails } from './components/common/functions';
 import Loader from './components/common/Loader';
-import { connectToSocketServer } from './socket';
+import { connectToSocketServer, socket } from './socket';
 import Chat from './components/Chat';
 import { RequireAuth } from './components/registration/RequireAuth';
+import { updateAdminChat } from './components/state/reducers/adminChatreducer';
+import { useState } from 'react';
 
 function App() {
   let dispatch = useDispatch();
   let authToken = useSelector((store) => store.authToken.value);
 
   let [getUserDetails] = useGetUserDetails();
+  // let [updateChat] = useChat();
 
   let loading = useSelector((store) => store.loading.value);
   let adminDetails = useSelector((store) => store.userDetails.value);
@@ -34,8 +37,12 @@ function App() {
       console.log("getting user detials");
       getUserDetails("admin");
     }
-  }, []);
 
+    socket.on("private message recieve", (data) => {
+      // updateChat(data.from, data.message, data.from);
+      console.log(data);
+    })
+  }, []);
 
 
 

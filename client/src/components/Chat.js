@@ -12,19 +12,42 @@ function Chat() {
     let admin = useSelector((store) => store.userDetails.value);
     const [mess, setMess] = useState("");
 
-    const [nowChat, setNowChat] = useState(null);
+    const [nowChat, setNowChat] = useState({ friend: "", pic: "", chat: [] });
+    const [chatMess, setChatMess] = useState([]);
     const handleClick = (index) => {
         setNowChat(chats[index]);
+        setChatMess(chats[index].chat);
     }
 
     const sendMessage = (username) => {
-        console.log(mess);
+        console.log("message sent")
         sendPrivateMessage(username, mess, admin.username);
+        let temp = chatMess;
+        console.log(typeof temp);
+        temp = [...temp, {
+            from: "a",
+            to: "b",
+            message: mess
+        }]
+        setChatMess(temp);
     }
 
     useEffect(() => {
         socket.on("private message recieve", ({ message, from }) => {
-            console.log(message, from);
+            // console.log(nowChat);
+            console.log("window: ", nowChat.friend, " from: ", from);
+            console.log(nowChat.friend === from);
+            if (nowChat.friend === from) {
+                let temp = chatMess;
+                console.log(typeof temp);
+                temp = [...temp, {
+                    from: "b",
+                    to: "a",
+                    message: message,
+                }]
+                setChatMess(temp);
+                console.log("Message recieved: ", message, from);
+            }
         })
     })
 
@@ -69,7 +92,7 @@ function Chat() {
                     </div>
                 </div>
                 <div className="w-8/12 sm:block hidden flex border-l-2 border-r-2">
-                    {!nowChat ? (
+                    {!chatMess ? (
                         <>
                             <div className="flex flex-col">
 
@@ -81,12 +104,23 @@ function Chat() {
                             </div>
 
                         </>
-                    ) : nowChat.chat.length === 0 ? (
+                    ) : chatMess.length === 0 ? (
                         <>
                             <div className="flex flex-col">
+                                <div className="flex p-2 items-center sticky border-b-2">
+                                    <img src={nowChat.pic ? nowChat.pic : nopp} alt="pp" className="mx-2 object-cover rounded-full h-10 w-10" />
+                                    <p className="font-semibold">{nowChat.friend}</p>
+                                </div>
 
-                                <div className="h-full mt-52 flex justify-center items-center flex-col">
+                                <div className="h-full text-xs italic grow mt-52 flex justify-center items-center flex-col">
                                     No new chats
+                                </div>
+                                <div className="flex flex-col items-center my-5">
+                                    <input onChange={(e) => setMess(e.target.value)} className="ml-2 w-52 border-2 rounded-xl p-1" type="text" placeholder="Say Hi!" />
+                                    <button onClick={() => sendMessage(nowChat.friend)} type="button" className="m-2 py-1 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 w-36 rounded-lg ">
+                                        Send
+                                    </button>
+
                                 </div>
                             </div>
                         </>
@@ -101,9 +135,9 @@ function Chat() {
 
                                 <div className="p-1 overflow-auto h-4/6 block">
                                     {/* <ul className="h-full overflow-auto"> */}
-                                    {nowChat.chat.map((item) => {
+                                    {chatMess.map((item, index) => {
                                         return (
-                                            <p key={item._id} style={{
+                                            <p key={index} style={{
                                                 float: `${item.from === 'a' ? 'right' : 'left'}`,
                                                 clear: 'both',
                                                 maxWidth: '20rem'
@@ -115,7 +149,7 @@ function Chat() {
                                     {/* </ul> */}
                                 </div>
 
-                                <div className="flex">
+                                <div className="flex border-2">
                                     <input onChange={(e) => setMess(e.target.value)} className="w-full ml-2 rounded-xl p-1" type="text" placeholder="send message" />
                                     <button onClick={() => sendMessage(nowChat.friend)} type="button" className="mx-2 py-1 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-13 transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                                         Send

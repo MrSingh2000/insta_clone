@@ -224,11 +224,12 @@ export function useChat(props) {
     let authToken = useSelector((store) => store.authToken.value);
     let dispatch = useDispatch();
     let [getUserDetails] = useGetUserDetails();
+    let adminChat = useSelector((store) => store.adminChat.value);
 
     const addChat = (username) => {
         dispatch(setLoading({ value: true }));
         axios({
-            method: 'put',
+            method: 'post',
             url: `${process.env.REACT_APP_HOST}/api/chat/new_user/${username}`,
             headers: {
                 'authToken': authToken
@@ -242,6 +243,23 @@ export function useChat(props) {
             dispatch(setLoading({ value: false }));
         })
     }
+
+    // const updateChat = (from, message, username) => {
+
+    //     for (let i = 0; i < adminChat.length; i++) {
+    //         if (adminChat[i].friend === username) {
+    //             adminChat[i].chat.push({
+    //                 from: from === "admin" ? "a" : "b",
+    //                 to: from === "admin" ? "b" : "a",
+    //                 message,
+    //             });
+    //             console.log("admin chat: ", adminChat);
+    //             dispatch(updateAdminChat(adminChat));
+    //             break;
+    //         }
+    //     }
+    //     console.log("i ma here");
+    // }
 
     return [addChat];
 }
