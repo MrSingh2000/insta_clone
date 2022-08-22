@@ -15,41 +15,39 @@ function Chat() {
     const [nowChat, setNowChat] = useState({ friend: "", pic: "", chat: [] });
     const [chatMess, setChatMess] = useState([]);
     const handleClick = (index) => {
-        setNowChat(chats[index]);
+        setNowChat({friend: chats[index].friend, pic: chats[index].pic, chat: chats[index].chat});
         setChatMess(chats[index].chat);
     }
 
     const sendMessage = (username) => {
-        console.log("message sent")
+        // console.log("message sent")
         sendPrivateMessage(username, mess, admin.username);
-        let temp = chatMess;
-        console.log(typeof temp);
-        temp = [...temp, {
+        setChatMess((cMessages) => [...cMessages, {
             from: "a",
             to: "b",
-            message: mess
-        }]
-        setChatMess(temp);
+            message: mess,
+        }]);
     }
 
     useEffect(() => {
         socket.on("private message recieve", ({ message, from }) => {
-            // console.log(nowChat);
+            console.log(nowChat);
             console.log("window: ", nowChat.friend, " from: ", from);
-            console.log(nowChat.friend === from);
+            // console.log(nowChat.friend === from);
             if (nowChat.friend === from) {
-                let temp = chatMess;
-                console.log(typeof temp);
-                temp = [...temp, {
+                setChatMess((cMessages) => [...cMessages, {
                     from: "b",
                     to: "a",
                     message: message,
-                }]
-                setChatMess(temp);
-                console.log("Message recieved: ", message, from);
+                }]);
+            }
+            else{
+                console.log("pass");
             }
         })
-    })
+    }, [nowChat]);
+
+    
 
 
     return (

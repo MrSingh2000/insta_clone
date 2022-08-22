@@ -38,10 +38,10 @@ function App() {
       getUserDetails("admin");
     }
 
-    socket.on("private message recieve", (data) => {
+    // socket.on("private message recieve", (data) => {
       // updateChat(data.from, data.message, data.from);
-      console.log(data);
-    })
+    //   console.log(data);
+    // })
   }, []);
 
 
