@@ -17,6 +17,7 @@ function Chat() {
     const handleClick = (index) => {
         setNowChat({friend: chats[index].friend, pic: chats[index].pic, chat: chats[index].chat});
         setChatMess(chats[index].chat);
+        setMess("");
     }
 
     const sendMessage = (username) => {
@@ -54,7 +55,7 @@ function Chat() {
         <div className="flex flex-col items-center h-screen overflow-hidden">
             <DesktopNav />
 
-            <div className="flex lg:w-8/12 w-full justify-center grow">
+            <div className="flex lg:w-8/12 w-full justify-center grow" style={{marginTop: '60px'}}>
                 <div className=" grow sm:w-40 text-center">
                     <p className="border-l-2 border-r-2">Username</p>
                     <div className="container border-t-2 border-l-2 border-r-2 flex flex-col mx-auto w-full items-center justify-center bg-white dark:bg-gray-800 shadow">
@@ -90,7 +91,7 @@ function Chat() {
                     </div>
                 </div>
                 <div className="w-8/12 sm:block hidden flex border-l-2 border-r-2">
-                    {!chatMess ? (
+                    {!nowChat.friend ? (
                         <>
                             <div className="flex flex-col">
 

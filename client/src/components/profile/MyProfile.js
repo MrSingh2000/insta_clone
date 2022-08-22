@@ -31,7 +31,7 @@ function MyProfile() {
         <DesktopNav />
 
         {/* Main content */}
-        <div className="flex flex-col justify-start w-full lg:w-2/3 mt-6">
+        <div className="flex flex-col justify-start w-full lg:w-2/3 mt-24">
           <div className="flex">
             <div onClick={handlePic} className="sm:p-16 flex justify-center items-center">
               <img  className="hover:z-0 z-10 rounded-full profilePic max-h-36" src={adminDetails.pic ? adminDetails.pic : nopp} alt="pp" />

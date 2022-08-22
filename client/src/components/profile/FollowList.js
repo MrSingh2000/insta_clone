@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useNavigationType, useParams } from 'react-router-dom';
 import { FollowNav } from '../Navbar';
 import { setLoading } from '../state/reducers/loadingReducer';
+import nopp from "../../static/home/no_pp.jpg"
 import { updateUserDetails } from '../state/reducers/userDetailsReducer';
 
 function FollowList(props) {
@@ -63,7 +64,7 @@ function FollowList(props) {
                                     <div className="select-none cursor-pointer flex flex-1 items-center p-4">
                                         <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
                                             <a href="#" className="block relative">
-                                                <img alt="profil" src="/images/person/6.jpg" className="mx-auto object-cover rounded-full h-10 w-10 " />
+                                                <img alt="profil" src={nopp} className="mx-auto object-cover rounded-full h-10 w-10 " />
                                             </a>
                                         </div>
                                         <div className="flex-1 pl-1 mr-16">
@@ -82,7 +83,7 @@ function FollowList(props) {
                                     <div className="select-none cursor-pointer flex flex-1 items-center p-4">
                                         <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
                                             <a href="#" className="block relative">
-                                                <img alt="profil" src="/images/person/6.jpg" className="mx-auto object-cover rounded-full h-10 w-10 " />
+                                                <img alt="profil" src={nopp} className="mx-auto object-cover rounded-full h-10 w-10 " />
                                             </a>
                                         </div>
                                         <div className="flex-1 pl-1 mr-16">

@@ -87,7 +87,7 @@ function OtherProfile() {
                 <DesktopNav />
 
                 {/* Main content */}
-                <div className="flex flex-col justify-start w-full lg:w-2/3 mt-6">
+                <div className="flex flex-col justify-start w-full lg:w-2/3 mt-20">
                     <div className="flex">
                         <div className="sm:p-16">
                             <img className="rounded-full max-h-36" src={userDetails?.pic ? userDetails.pic : nopp} alt="pp" />

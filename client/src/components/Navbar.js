@@ -91,7 +91,7 @@ export function DesktopNav() {
     }
 
     return (
-        <nav className="h-fit p-2 flex items-center mx-auto w-full lg:w-2/3 justify-between border-b-2 border-gray-200">
+        <nav className="z-10 fixed bg-white h-fit p-2 flex items-center mx-auto w-full lg:w-2/3 justify-between border-b-2 border-gray-200">
             {location.pathname.indexOf("/user/") === -1 ? (
                 // Camera icon
                 <>
@@ -108,7 +108,7 @@ export function DesktopNav() {
             {/* search box */}
             <div className="md:block hidden relative ">
                 <input onChange={(e) => searchUser(e)} autoComplete="off" autoSave="off" type="text" id="rounded-email" className="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Search" />
-                <div style={{ backgroundColor: '#FFFFFF' }} className={`border-2 border-slate-300 rounded-xl h-40 absolute w-full mt-1 ${searchList.length === 0 ? 'hidden' : ''}`}>
+                <div style={{ backgroundColor: '#FFFFFF' }} className={`bg-white border-2 border-slate-300 rounded-xl h-40 absolute w-full mt-1 ${searchList.length === 0 ? 'hidden' : ''}`}>
                     <ul>
 
                         {searchList.map((user) => {
@@ -276,7 +276,7 @@ export function FollowNav(props) {
         <nav className="h-fit p-2 flex items-center m-auto w-full lg:w-2/3 md:justif-around justify-between border-b-2 border-gray-200">
             <div className="w-full border-grey-200 bg-white p-2">
                 <div className="flex justify-around w-full items-center">
-                    <svg onClick={() => navigate(-1)} aria-label="Back" className='-rotate-90' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M21 17.502a.997.997 0 01-.707-.293L12 8.913l-8.293 8.296a1 1 0 11-1.414-1.414l9-9.004a1.03 1.03 0 011.414 0l9 9.004A1 1 0 0121 17.502z"></path></svg>
+                    <svg onClick={() => navigate(-1)} aria-label="Back" className='-rotate-90 cursor-pointer' color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M21 17.502a.997.997 0 01-.707-.293L12 8.913l-8.293 8.296a1 1 0 11-1.414-1.414l9-9.004a1.03 1.03 0 011.414 0l9 9.004A1 1 0 0121 17.502z"></path></svg>
                     <p className="w-full text-center font-semibold text-lg capitalize">{header}</p>
                 </div>
             </div>
