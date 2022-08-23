@@ -198,7 +198,7 @@ export function DesktopNav() {
             <div className="bg-gray-200 flex items-center justify-center absolute z-10">
                 <div className="postModal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
                     <div onClick={togglePostModal} className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-                    <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-xl shadow-lg z-50 overflow-y-auto">
+                    <div className="modal-container bg-white max-w-2/6 min-w-96 mx-auto rounded-xl shadow-lg z-50 overflow-y-auto">
                         <div className="modal-content py-2 text-left px-6">
                             <div className="flex flex-col justify-between items-center pb-3">
                                 <p className="border-b-2 border-grey-200 w-full text-center py-1 text-black-700 font-medium">Create New Post</p>
