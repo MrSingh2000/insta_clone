@@ -9,6 +9,11 @@ const io = require("socket.io")(httpServer, {
     },
 });
 
+
+http.get('/', (res) => {
+    res.send('Hi socket.io');
+})
+
 let users = new Map();
 
 io.on("connection", socket => {
@@ -29,10 +34,10 @@ io.on("connection", socket => {
     socket.on("private message send", ({ username, message, from }) => {
         let to = users.get(username);
         if (!to) {
-            socket.to(to).emit("user offline", {username});
+            socket.to(to).emit("user offline", { username });
         }
-        else{
-            socket.to(to).emit("private message recieve", {message, from});
+        else {
+            socket.to(to).emit("private message recieve", { message, from });
         }
         console.log(users, message, username, to);
     })
