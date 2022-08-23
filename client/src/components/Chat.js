@@ -6,11 +6,13 @@ import nopp from "../static/home/no_pp.jpg";
 import { useState } from 'react';
 import { sendPrivateMessage, socket } from '../socket';
 import { useEffect } from 'react';
+import audioSrc from "../static/mess_audio.mp3";
 
 function Chat() {
     let chats = useSelector((store) => store.adminChat.value);
     let admin = useSelector((store) => store.userDetails.value);
     const [mess, setMess] = useState("");
+    let audio;
 
     const [nowChat, setNowChat] = useState({ friend: "", pic: "", chat: [] });
     const [chatMess, setChatMess] = useState([]);
@@ -32,9 +34,7 @@ function Chat() {
 
     useEffect(() => {
         socket.on("private message recieve", ({ message, from }) => {
-            console.log(nowChat);
-            console.log("window: ", nowChat.friend, " from: ", from);
-            // console.log(nowChat.friend === from);
+            handleAudio();
             if (nowChat.friend === from) {
                 setChatMess((cMessages) => [...cMessages, {
                     from: "b",
@@ -47,8 +47,11 @@ function Chat() {
             }
         })
     }, [nowChat]);
-
-
+    
+    const handleAudio = () => {
+        audio = new Audio(audioSrc);
+        audio.play();
+    }
 
 
     return (
