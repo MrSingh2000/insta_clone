@@ -2,6 +2,7 @@ import React from 'react';
 import logo from '../static/login/login_logo.png';
 import { BsThreeDots } from 'react-icons/bs';
 import mainProfile from "../static/home/mainpp.jpg";
+import nopp from "../static/home/no_pp.jpg";
 import pp1 from "../static/home/pp1.jpg";
 import pp2 from "../static/home/pp2.jpg";
 import pp3 from "../static/home/pp3.jpg";
@@ -58,6 +59,7 @@ function Home() {
       name: "ahsaassy_"
     }];
   const dispatch = useDispatch();
+  const adminDetails = useSelector((store) => store.userDetails.value);
   // useAdminChat()
   // profile menu dropdown
   const [profileDrop, setProfileDrop] = useState(false);
@@ -80,7 +82,7 @@ function Home() {
       {/* <button onClick={() => dispatch(set({value: "this is new"}))}>Click me</button> */}
       <DesktopNav />
       {/* Main Content */}
-      <div className="flex mt-20">
+      <div className="flex sm:mt-20 mt-9">
         <div>
           {/* Stories */}
           <div className="px-2">
@@ -171,10 +173,10 @@ function Home() {
           <div className="px-2 mt-4 p-2">
             {/* user profile */}
             <div className="flex text-sm w-80">
-              <img src={mainProfile} alt="main" className="w-16 rounded-full" />
+              <img src={adminDetails.pic ? adminDetails.pic : nopp} alt="main" className="w-16 rounded-full" />
               <div className="p-2">
-                <p className="font-semibold">mr_singh2000</p>
-                <p className="font-light">ਅੰਸ਼ੂਮਨ ਸਿੰਘ</p>
+                <p className="font-semibold">{adminDetails.username}</p>
+                <p className="font-light">{adminDetails.name}</p>
               </div>
             </div>
             {/* suggestions */}

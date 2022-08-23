@@ -30,7 +30,7 @@ export function DesktopNav() {
             method: 'get',
             url: `${process.env.REACT_APP_HOST}/api/search/get?search=${username}`,
             headers: {
-                "authToken": process.env.REACT_APP_AUTH_TOKEN,
+                "authToken": authToken,
             }
         }).then((res) => {
             setSearchList(res.data);
@@ -65,7 +65,7 @@ export function DesktopNav() {
                 method: 'get',
                 url: `${process.env.REACT_APP_HOST}/api/post/post_url/${userId}`,
                 headers: {
-                    'authToken': process.env.REACT_APP_AUTH_TOKEN
+                    'authToken': authToken
                 }
             }).then((response) => {
                 console.log(response);
@@ -142,7 +142,7 @@ export function DesktopNav() {
                 }} className='cursor-pointer'>
                     <svg aria-label="New post" className="md:block hidden mx-3" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M2 12v3.45c0 2.849.698 4.005 1.606 4.944.94.909 2.098 1.608 4.946 1.608h6.896c2.848 0 4.006-.7 4.946-1.608C21.302 19.455 22 18.3 22 15.45V8.552c0-2.849-.698-4.006-1.606-4.945C19.454 2.7 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.547 2 5.703 2 8.552z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="6.545" x2="17.455" y1="12.001" y2="12.001"></line><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="12.003" x2="12.003" y1="6.545" y2="17.455"></line></svg>
                 </button>
-                {/* Explore */}
+                {/* Search */}
                 <Link to="/" className="cursor-pointer">
                     <svg aria-label="Find People" className="md:block hidden mx-3" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><polygon fill="none" points="13.941 13.953 7.581 16.424 10.06 10.056 16.42 7.585 13.941 13.953" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></polygon><polygon fillRule="evenodd" points="10.06 10.056 13.949 13.945 7.581 16.424 10.06 10.056"></polygon><circle cx="12.001" cy="12.005" fill="none" r="10.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></circle></svg>
                 </Link>
@@ -248,7 +248,7 @@ export function MobileNav() {
                     <svg aria-label="Home" className="md:hidden" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M22 23h-6.001a1 1 0 01-1-1v-5.455a2.997 2.997 0 10-5.993 0V22a1 1 0 01-1 1H2a1 1 0 01-1-1V11.543a1.002 1.002 0 01.31-.724l10-9.543a1.001 1.001 0 011.38 0l10 9.543a1.002 1.002 0 01.31.724V22a1 1 0 01-1 1z"></path></svg>
                 </Link>
                 {/* Search */}
-                <Link to="/" className="cursor-pointer">
+                <Link to="/search" className="cursor-pointer">
                     <svg aria-label="Search &amp; Explore" className="md:hidden" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M19 10.5A8.5 8.5 0 1110.5 2a8.5 8.5 0 018.5 8.5z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path><line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="16.511" x2="22" y1="16.511" y2="22"></line></svg>
                 </Link>
                 {/* New Post */}

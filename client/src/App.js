@@ -20,6 +20,7 @@ import Chat from './components/Chat';
 import { RequireAuth } from './components/registration/RequireAuth';
 import { updateAdminChat } from './components/state/reducers/adminChatreducer';
 import { useState } from 'react';
+import MobileSearch from './components/profile/MobileSearch';
 
 function App() {
   let dispatch = useDispatch();
@@ -63,6 +64,7 @@ function App() {
             </Route>
 
           </Route>
+          <Route path="search" element={<MobileSearch />} />
 
           <Route path="user/:userId" element={<OtherProfile />} />
 
