@@ -1,5 +1,7 @@
-const httpServer = require("http").createServer();
-const port = process.env.PORT || 8080;
+const express = require('express');
+const app = express();
+const httpServer = require("http").createServer(app);
+const port = process.env.PORT || 5000;
 const cors = require('cors')
 
 const io = require("socket.io")(httpServer, {
@@ -9,8 +11,9 @@ const io = require("socket.io")(httpServer, {
     },
 });
 
+app.use(cors());
 
-http.get('/', (res) => {
+app.get('/', (req, res) => {
     res.send('Hi socket.io');
 })
 
