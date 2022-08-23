@@ -1,21 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {  useRef } from 'react';
 import nopp from '../../static/home/no_pp.jpg';
 import { RiSettings3Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { DesktopNav, MobileNav } from "../Navbar";
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { BsCameraFill } from 'react-icons/bs';
-import { useGetUserDetails, useUploadFile } from '../common/functions';
+import { useUploadFile } from '../common/functions';
 
 function MyProfile() {
-  let dispatch = useDispatch();
   let [uploadFile] =  useUploadFile();
 
   let adminDetails = useSelector((store) => store.userDetails.value);
-
-  const [profileDrop, setProfileDrop] = useState(false);
-  let authToken = useSelector((store) => store.authToken.value);
   const posts = useSelector((state) => state.userPost.value);
 
   const inputRef = useRef(null);

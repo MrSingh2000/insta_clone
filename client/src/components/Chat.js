@@ -71,6 +71,7 @@ function Chat() {
                                     <li key={item._id} onClick={() => handleClick(index)} className="flex flex-row w-full items-start">
                                         <div className="select-none cursor-pointer flex p-4">
                                             <div className="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                                                {/* eslint-disable-next-line */}
                                                 <a href="#" className="block relative">
                                                     <img alt="profil" src={item.pic ? item.pic : nopp} className="mx-auto object-cover rounded-full h-10 w-10" />
                                                 </a>
@@ -220,7 +221,7 @@ function Chat() {
 
                                 </div>
                             </>)}
-                    
+
                     </div>) : (null)}
 
             </div>

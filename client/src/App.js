@@ -1,36 +1,28 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, useNavigationType, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from 'react';
 import Home from './components/Home';
 import Contact from './components/Contact';
 import Login from './components/registration/Login';
 import Signup from './components/registration/Signup';
 import MyProfile from './components/profile/MyProfile';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux/es/exports';
-import { updatePosts } from './components/state/reducers/userPostReducer';
+import { useSelector } from 'react-redux/es/exports';
 import OtherProfile from './components/profile/OtherProfile';
-import { updateUserDetails } from './components/state/reducers/userDetailsReducer';
 import FollowList from './components/profile/FollowList';
 import Error from './components/Error';
-import { useAdminChat, useChat, useGetUserDetails } from './components/common/functions';
+import { useGetUserDetails } from './components/common/functions';
 import Loader from './components/common/Loader';
-import { connectToSocketServer, socket } from './socket';
 import Chat from './components/Chat';
 import { RequireAuth } from './components/registration/RequireAuth';
-import { updateAdminChat } from './components/state/reducers/adminChatreducer';
-import { useState } from 'react';
 import MobileSearch from './components/profile/MobileSearch';
 
 function App() {
-  let dispatch = useDispatch();
   let authToken = useSelector((store) => store.authToken.value);
 
   let [getUserDetails] = useGetUserDetails();
   // let [updateChat] = useChat();
 
   let loading = useSelector((store) => store.loading.value);
-  let adminDetails = useSelector((store) => store.userDetails.value);
 
   useEffect(() => {
     // when logged in and authToken exists, get the user's posts 
@@ -38,11 +30,7 @@ function App() {
       console.log("getting user detials");
       getUserDetails("admin");
     }
-
-    // socket.on("private message recieve", (data) => {
-      // updateChat(data.from, data.message, data.from);
-    //   console.log(data);
-    // })
+    // eslint-disable-next-line
   }, []);
 
 

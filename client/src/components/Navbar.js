@@ -153,7 +153,7 @@ export function DesktopNav() {
                 <div className="relative inline-block text-left md:block hidden">
                     <div>
                         <button onClick={() => { setProfileDrop((prevState) => !prevState) }} type="button" className="flex items-center justify-center w-6 h-6 rounded-lg" id="options-menu">
-                            <img alt="mr_singh2000's profile picture" className="rounded-lg" draggable="false" src={adminDetails.pic ? adminDetails.pic : nopp} />
+                            <img alt="pp" className="rounded-lg" draggable="false" src={adminDetails.pic ? adminDetails.pic : nopp} />
                         </button>
                     </div>
                     <div className={`${profileDrop ? "block" : "hidden"} origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5`}>
@@ -262,7 +262,7 @@ export function MobileNav() {
                 </Link>
                 {/* profile pic */}
                 <Link to="/myprofile" style={{ width: '24px', height: '24px' }}>
-                    <span className="md:hidden rounded-lg" role="link" tabIndex="0" style={{ width: '24px', height: '24px' }}><img alt="mr_singh2000's profile picture" className="rounded-lg" draggable="false" src={adminDetails.pic ? adminDetails.pic : nopp} /></span>
+                    <span className="md:hidden rounded-lg" role="link" tabIndex="0" style={{ width: '24px', height: '24px' }}><img alt="pp" className="rounded-lg" draggable="false" src={adminDetails.pic ? adminDetails.pic : nopp} /></span>
                 </Link>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../state/reducers/loadingReducer";
@@ -6,8 +6,8 @@ import { updateUserDetails } from "../state/reducers/userDetailsReducer";
 import { updatePosts } from "../state/reducers/userPostReducer";
 import { updateAdminChat } from '../state/reducers/adminChatreducer';
 import { connectToSocketServer } from '../../socket';
-import authTokenReducer, { setAuthToken } from '../state/reducers/authTokenReducer';
-import { useNavigate, useNavigationType } from 'react-router-dom';
+import { setAuthToken } from '../state/reducers/authTokenReducer';
+import { useNavigate } from 'react-router-dom';
 
 // THESE ARE CUSTOM REACT HOOKS
 
@@ -95,7 +95,7 @@ export function useGetPostUrls(props) {
 
 export function useGetUserDetails(props) {
     let dispatch = useDispatch();
-    let [getPostUrls, getOtherUserPosts] = useGetPostUrls();
+    let [getPostUrls] = useGetPostUrls();
     let authToken = useSelector((store) => store.authToken.value);
 
     const getUserDetails = (userType, posts = true, token = null) => {
@@ -186,6 +186,7 @@ export function useAdminChat(props) {
             console.log(err);
             dispatch(setLoading({ value: false }));
         })
+        // eslint-disable-next-line
     }, []);
 
 }
@@ -224,7 +225,6 @@ export function useChat(props) {
     let authToken = useSelector((store) => store.authToken.value);
     let dispatch = useDispatch();
     let [getUserDetails] = useGetUserDetails();
-    let adminChat = useSelector((store) => store.adminChat.value);
 
     const addChat = (username) => {
         dispatch(setLoading({ value: true }));

@@ -1,10 +1,10 @@
 import React from 'react';
-import logo from '../static/login/login_logo.png';
 import { BsThreeDots } from 'react-icons/bs';
 import mainProfile from "../static/home/mainpp.jpg";
 import nopp from "../static/home/no_pp.jpg";
 import pp1 from "../static/home/pp1.jpg";
 import pp2 from "../static/home/pp2.jpg";
+/* eslint-disable */
 import pp3 from "../static/home/pp3.jpg";
 import pp4 from "../static/home/pp4.jpg";
 import pp5 from "../static/home/pp5.jpg";
@@ -17,17 +17,11 @@ import post2 from "../static/home/sample1.jpg";
 import post3 from "../static/home/sample2.jpg";
 import post4 from "../static/home/sample3.2.jpg";
 import post5 from "../static/home/sample3.1.jpg";
+/* eslint-enable */
 
 import "../styles/custom.css";
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux/es/exports';
-import { set, remove } from './state/reducers/authTokenReducer';
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux/es/exports';
 import { DesktopNav, MobileNav } from "./Navbar";
-import { update } from './state/reducers/userPostReducer';
-import axios from 'axios';
-import { useAdminChat } from './common/functions';
-import { socket } from '../socket';
 import { FcLike } from "react-icons/fc";
 import { BiComment } from "react-icons/bi";
 import { BsBookmark } from "react-icons/bs";
@@ -58,14 +52,9 @@ function Home() {
       pic: pp8,
       name: "ahsaassy_"
     }];
-  const dispatch = useDispatch();
   const adminDetails = useSelector((store) => store.userDetails.value);
   // useAdminChat()
-  // profile menu dropdown
-  const [profileDrop, setProfileDrop] = useState(false);
 
-
-  const authToken = useSelector(state => state.authToken.value);
 
   function toggleModal() {
     const body = document.querySelector('body');
@@ -189,6 +178,7 @@ function Home() {
                   <p className="font-light">ਅੰਸ਼ੂਮਨ ਸਿੰਘ</p>
                 </div>
               </div>
+              {/* eslint-disable-next-line */}
               <a href="#" className="font-semibold text-blue-600">Follow</a>
             </div>
 
@@ -200,6 +190,7 @@ function Home() {
                   <p className="font-light">New to insta</p>
                 </div>
               </div>
+              {/* eslint-disable-next-line */}
               <a href="#" className="font-semibold text-blue-600">Follow</a>
             </div>
           </div>
