@@ -3,8 +3,58 @@ import instaLogo from "../../static/login/login_logo.png";
 import { AiFillFacebook } from 'react-icons/ai';
 import googlePlayDownload from "../../static/login/google_play_download_badge.png";
 import appstoreDonwlaod from "../../static/login/appstore_download_badge.png";
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../state/reducers/loadingReducer';
+import { setAuthToken } from '../state/reducers/authTokenReducer';
+import { useGetUserDetails } from '../common/functions';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
+    let dispatch = useDispatch();
+    let [getUserDetails] = useGetUserDetails();
+    let navigate = useNavigate();
+
+    const [details, setDetails] = useState({
+        username: "",
+        fullName: "",
+        phoneNum: "",
+        // email: "",
+        password: "",
+        // name: ""
+    });
+
+    const handleChange = (e) => {
+        setDetails({ ...details, [e.target.name]: e.target.value });
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let data = {
+            ...details,
+            email: details.phoneNum,
+            name: details.fullName,
+        }
+
+        dispatch(setLoading({ value: true }));
+        axios({
+            method: 'post',
+            url: `${process.env.REACT_APP_HOST}/api/auth/register`,
+            data
+        }).then((res) => {
+            localStorage.clear();
+            dispatch(setAuthToken(res.data.authToken));
+            getUserDetails("admin", true, res.data.authToken);
+            localStorage.setItem("authToken", res.data.authToken);
+            navigate('/');
+        }).catch((err) => {
+            console.log(err);
+            dispatch(setLoading({ value: false }));
+        })
+
+    }
+
     return (
         <div className="flex justify-center items-center h-auto flex-col my-4">
             <div className="border-2 border-slate-200 pt-14">
@@ -31,25 +81,25 @@ export default function Signup() {
                     {/* FORM */}
                     <div className="flex flex-col max-w-md px-2 bg-white rounded-lg dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
                         <div className="p-6 mt-1">
-                            <form action="#">
+                            <form>
                                 <div className="flex flex-col mb-2">
                                     <div className=" relative ">
-                                        <input type="text" id="create-account-pseudo" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="phonenumber" placeholder="Mobile Number or Email" />
+                                        <input onChange={(e) => handleChange(e)} type="text" id="create-account-pseudo" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="phoneNum" placeholder="Mobile Number or Email" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col mb-2">
                                     <div className=" relative ">
-                                        <input type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="fullname" placeholder="Full Name" />
+                                        <input onChange={(e) => handleChange(e)} type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="fullName" placeholder="Full Name" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col mb-2">
                                     <div className=" relative ">
-                                        <input type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="username" placeholder="Username" />
+                                        <input onChange={(e) => handleChange(e)} type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="username" placeholder="Username" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col mb-2">
                                     <div className=" relative ">
-                                        <input type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="password" placeholder="Password" />
+                                        <input onChange={(e) => handleChange(e)} type="text" id="create-account-email" className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent" name="password" placeholder="Password" />
                                     </div>
                                 </div>
                                 <div>
@@ -61,7 +111,7 @@ export default function Signup() {
                                     <p className="text-xs text-center opacity-60">By signing up, you agree to our<br />Terms , Data Policy and Cookies Policy .</p>
                                 </div>
                                 <div className="flex w-full my-4">
-                                    <button type="submit" className="py-2 px-4  bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 focus:ring-offset-sky-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                    <button onClick={(e) => handleSubmit(e)} type="submit" className="py-2 px-4  bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 focus:ring-offset-sky-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
                                         Sign up
                                     </button>
                                 </div>

@@ -63,6 +63,9 @@ router.post('/register', [
         }
         const salt = await bcrypt.genSalt(10);
         const securePass = await bcrypt.hash(password, salt);
+        if (typeof(phoneNum) !== 'number') {
+            phoneNum = 0;
+        }
         user = await User.create({
             username, phoneNum, email, password: securePass
         });
@@ -83,6 +86,7 @@ router.post('/register', [
         const authToken = jwt.sign(data, process.env.JWT_SECRET);
         res.json({ authToken });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Internal Server Error Occurred! Try again later" });
     }
 });

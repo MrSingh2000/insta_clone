@@ -206,7 +206,7 @@ export function useLogin(props) {
                 password
             }
         }).then((res) => {
-            console.log(res.data);
+            localStorage.clear();
             dispatch(setAuthToken(res.data.authToken));
             getUserDetails("admin", true, res.data.authToken);
             localStorage.setItem("authToken", res.data.authToken);
