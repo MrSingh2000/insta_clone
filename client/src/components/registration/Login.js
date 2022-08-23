@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../styles/login.css';
+import { Link } from 'react-router-dom';
 import instaLogo from "../../static/login/login_logo.png";
 import googlePlayDownload from "../../static/login/google_play_download_badge.png";
 import appstoreDonwlaod from "../../static/login/appstore_download_badge.png";
@@ -97,7 +98,7 @@ export default function Login() {
 
                     {/* Dont have an account block */}
                     <div className="flex flex-col max-w-md py-4 mt-3 px-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
-                        <p>Don't have an account? <span className="text-sky-700">Sign up</span></p>
+                        <Link to="/register">Don't have an account? <span className="text-sky-700">Sign up</span></Link>
                     </div>
                 </div>
 
