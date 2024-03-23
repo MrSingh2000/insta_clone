@@ -34,7 +34,7 @@ export function useUploadFile(props) {
             url,
             headers: {
                 "authToken": authToken,
-                "Content-Type": "ultipart/form-data",
+                "Content-Type": "multipart/form-data",
             },
             data
         }).then((res) => {
